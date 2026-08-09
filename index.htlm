@@ -1,1 +1,264 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEO Haber Merkezi</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 22px 7%;
+      border-bottom: 1px solid #243247;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #38bdf8;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 70px 20px 40px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 span {
+      color: #38bdf8;
+    }
+
+    .hero p {
+      color: #aab8ca;
+      font-size: 18px;
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .search {
+      max-width: 750px;
+      margin: 35px auto;
+      display: flex;
+      background: #111d2e;
+      border: 1px solid #2a3a51;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .search input {
+      flex: 1;
+      border: 0;
+      outline: 0;
+      padding: 20px;
+      background: transparent;
+      color: white;
+      font-size: 16px;
+    }
+
+    .search button {
+      border: 0;
+      background: #0ea5e9;
+      color: white;
+      padding: 0 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .container {
+      width: 86%;
+      max-width: 1200px;
+      margin: 20px auto 70px;
+    }
+
+    .container h2 {
+      margin-bottom: 22px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: #111d2e;
+      border: 1px solid #26364c;
+      border-radius: 16px;
+      padding: 28px;
+      min-height: 180px;
+      transition: .2s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: #38bdf8;
+    }
+
+    .icon {
+      font-size: 32px;
+      margin-bottom: 18px;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .card p {
+      color: #9fb0c4;
+      line-height: 1.5;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 18px;
+      color: #38bdf8;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      color: #718096;
+      padding: 25px;
+      border-top: 1px solid #243247;
+    }
+
+    @media(max-width: 800px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 35px;
+      }
+
+      .search {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">SEO <span>Haber Merkezi</span></div>
+  <div>Yapay Zekâ Destekli Haber Platformu</div>
+</header>
+
+<section class="hero">
+
+  <h1>SEO <span>Haber Merkezi</span></h1>
+
+  <p>
+    Haber üretimini hızlandırın. SEO uyumlu içerikler oluşturun,
+    gündemi takip edin ve haberlerinizi dijital dünyaya hazırlayın.
+  </p>
+
+  <div class="search">
+    <input
+      type="text"
+      placeholder="Haber konusu, anahtar kelime veya gündem başlığı yazın..."
+    >
+    <button>Haber Üret</button>
+  </div>
+
+</section>
+
+<main class="container">
+
+  <h2>Hızlı Araçlar</h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="icon">✍️</div>
+      <h3>SEO Haber Üret</h3>
+      <p>
+        Başlık, spot, haber metni, meta açıklaması,
+        URL ve etiketler oluşturun.
+      </p>
+      <span class="badge">HABER OLUŞTUR →</span>
+    </div>
+
+    <div class="card">
+      <div class="icon">📈</div>
+      <h3>Google Trends</h3>
+      <p>
+        Gündemde yükselen aramaları ve haber fırsatlarını takip edin.
+      </p>
+      <span class="badge">TRENDLERİ GÖR →</span>
+    </div>
+
+    <div class="card">
+      <div class="icon">🚀</div>
+      <h3>Discover Merkezi</h3>
+      <p>
+        Google Discover için güçlü başlık ve içerik fikirleri oluşturun.
+      </p>
+      <span class="badge">KEŞFET →</span>
+    </div>
+
+    <div class="card">
+      <div class="icon">📍</div>
+      <h3>Yerel Haber Merkezi</h3>
+      <p>
+        Şehir bazlı gündem, hava durumu ve yerel haber fikirlerini yönetin.
+      </p>
+      <span class="badge">YEREL HABER →</span>
+    </div>
+
+    <div class="card">
+      <div class="icon">🔎</div>
+      <h3>SEO Araçları</h3>
+      <p>
+        Anahtar kelime, başlık ve haber SEO kontrollerini tek merkezden yapın.
+      </p>
+      <span class="badge">SEO ANALİZ →</span>
+    </div>
+
+    <div class="card">
+      <div class="icon">🤖</div>
+      <h3>Yapay Zekâ Araçları</h3>
+      <p>
+        Haber editörleri için yapay zekâ destekli içerik araçlarını kullanın.
+      </p>
+      <span class="badge">ARAÇLARI AÇ →</span>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  © 2026 SEO Haber Merkezi
+</footer>
+
+</body>
+</html>
