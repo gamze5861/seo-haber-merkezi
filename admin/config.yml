@@ -1,0 +1,62 @@
+backend:
+  name: github
+  repo: gamze5861/seo-haber-merkezi
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+locale: "tr"
+
+collections:
+  - name: "haberler"
+    label: "Haberler"
+    folder: "haberler"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+
+    fields:
+      - label: "Başlık"
+        name: "title"
+        widget: "string"
+
+      - label: "Yayın Tarihi"
+        name: "date"
+        widget: "datetime"
+
+      - label: "Kategori"
+        name: "category"
+        widget: "select"
+        options:
+          - "SEO"
+          - "Google"
+          - "Yapay Zeka"
+          - "Dijital Pazarlama"
+          - "Teknoloji"
+
+      - label: "Editör"
+        name: "author"
+        widget: "string"
+
+      - label: "Spot"
+        name: "description"
+        widget: "text"
+
+      - label: "Haber Görseli"
+        name: "image"
+        widget: "image"
+        required: false
+
+      - label: "SEO Başlığı"
+        name: "seo_title"
+        widget: "string"
+        required: false
+
+      - label: "Meta Açıklaması"
+        name: "seo_description"
+        widget: "text"
+        required: false
+
+      - label: "Haber Metni"
+        name: "body"
+        widget: "markdown"
