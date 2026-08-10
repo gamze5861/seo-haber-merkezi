@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: Gamzebal/seo-haber-merkezi
+  repo: gamze5861/seo-haber-merkezi
   branch: main
 
 media_folder: "images/uploads"
