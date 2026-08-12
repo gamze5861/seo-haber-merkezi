@@ -753,29 +753,66 @@ SEO Haberci AI, gazeteciliğin ve editoryal kararların yerine geçmek için de�
         "Yapay zekâ bağlantısı sonraki aşamada eklenecek.";
     }
 
-    function demoEdit() {
-      const text = document.getElementById("sourceText").value.trim();
+    async function demoEdit() {
+    const text = document.getElementById("sourceText").value.trim();
 
-      if (!text) {
+    if (!text) {
         alert("Önce bir haber metni veya konu girin.");
         return;
-      }
-
-      document.getElementById("resultTitle").innerText =
-        "Profesyonel SEO başlığı burada oluşturulacak";
-
-      document.getElementById("resultSpot").innerText =
-        "Haberin özetini veren güçlü ve editoryal spot burada hazırlanacak.";
-
-      document.getElementById("resultMeta").innerText =
-        "Google arama sonuçları için optimize edilmiş meta açıklaması burada üretilecek.";
-
-      document.getElementById("resultKeywords").innerText =
-        "anahtar kelime, güncel konu, SEO haber";
-
-      document.getElementById("resultNote").innerText =
-        "Arayüz hazır. Bir sonraki aşamada OpenAI API ve canlı veri kaynaklarını bağlayacağız.";
     }
+
+    const button = document.querySelector('button[onclick="demoEdit()"]');
+    const oldText = button ? button.innerText : "";
+
+    if (button) {
+        button.disabled = true;
+        button.innerText = "Haber hazırlanıyor...";
+    }
+
+    try {
+        const response = await fetch("/.netlify/functions/generate-news", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                sourceText: text
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Haber oluşturulamadı.");
+        }
+
+        document.getElementById("resultTitle").innerText =
+            data.title || data.seoTitle || "Başlık oluşturuldu.";
+
+        document.getElementById("resultSpot").innerText =
+            data.spot || "Spot oluşturuldu.";
+
+        document.getElementById("resultMeta").innerText =
+            data.meta || data.metaDescription || "Meta açıklaması oluşturuldu.";
+
+        document.getElementById("resultKeywords").innerText =
+            Array.isArray(data.keywords)
+                ? data.keywords.join(", ")
+                : (data.keywords || "Anahtar kelimeler oluşturuldu.");
+
+        document.getElementById("resultNote").innerText =
+            data.article || data.content || data.news || "SEO haber metni oluşturuldu.";
+
+    } catch (error) {
+        console.error(error);
+        alert("Haber hazırlanırken hata oluştu: " + error.message);
+    } finally {
+        if (button) {
+            button.disabled = false;
+            button.innerText = oldText || "Haberi Düzenle";
+        }
+    }
+}
   </script>
 
 </body>
