@@ -64,7 +64,7 @@ KESİN KURALLAR:
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-5",
+        model: gpt-5-mini",
         store: false,
         instructions,
         input: `Aşağıdaki ham içeriği SEO uyumlu profesyonel habere dönüştür:\n\n${sourceText}`,
