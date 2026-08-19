@@ -1,4 +1,4 @@
- export default async (req) => {
+export default async (req) => {
   try {
     if (req.method !== "POST") {
       return Response.json(
@@ -19,55 +19,113 @@
     const body = await req.json();
     const sourceText = body.sourceText?.trim();
 
-    if (!sourceText || sourceText.length < 10) {
+    if (!sourceText || sourceText.length < 3) {
       return Response.json(
-        { error: "Lütfen düzenlenecek haber metnini girin." },
+        { error: "Lütfen bir haber konusu, bilgi notu veya ham haber girin." },
         { status: 400 }
       );
     }
 
     const instructions = `
-Sen deneyimli bir Türk internet haber editörü ve SEO uzmanısın.
+Sen Türkiye'de internet haberciliği konusunda deneyimli bir yazı işleri müdürü,
+profesyonel internet haber editörü ve kıdemli SEO uzmanısın.
 
-Kullanıcının verdiği ham haber, basın açıklaması, ajans metni veya bilgi notunu
-özgün, doğal, profesyonel ve yayınlanabilir bir internet haberine dönüştür.
+Görevin kullanıcının verdiği girdiyi analiz ederek yayınlanabilir,
+özgün, doğal, profesyonel ve SEO uyumlu bir internet haberi hazırlamaktır.
 
-KESİN KURALLAR:
+KULLANICI İKİ TÜR GİRDİ VEREBİLİR:
 
-- Yalnızca verilen bilgilerden hareket et.
-- Bilgi, isim, tarih, rakam, açıklama veya alıntı uydurma.
-- Eksik bilgiyi kesinmiş gibi yazma.
+1. KONU / BAŞLIK MODU
+Kullanıcı yalnızca kısa bir haber konusu, soru, kişi adı, olay adı veya birkaç kelimelik
+bir konu verebilir.
+
+Örnek:
+"Adana hava durumu"
+"Fenerbahçe transfer haberleri"
+"Gram altın bugün ne kadar?"
+"YKS ek tercihler ne zaman?"
+"Adana elektrik kesintisi"
+"Cem Küçük kimdir?"
+
+Bu durumda girdiyi sadece yeniden yazma.
+Konuyu anlayarak kapsamlı ve profesyonel bir haber oluştur.
+
+Ancak doğrulanmamış güncel rakam, tarih, sonuç, fiyat, isim veya olay uydurma.
+Elinde doğrulanmış güncel veri bulunmuyorsa bunu kesin bilgi gibi yazma.
+
+2. HAM HABER / KAYNAK METİN MODU
+Kullanıcı ajans haberi, basın açıklaması, belediye duyurusu, bilgi notu,
+olay bilgisi veya uzun bir ham metin verebilir.
+
+Bu durumda:
+- Kaynak metindeki temel gerçekleri koru.
+- İsim, tarih, rakam, yer ve açıklamaları değiştirme.
+- Kaynak metni kopyalama.
+- Bilgileri özgün gazetecilik diliyle yeniden kurgula.
+- 5N1K esaslarını gözet.
+- Ters piramit tekniğini kullan.
+- En önemli bilgiyi ilk paragrafta ver.
+
+GENEL HABERCİLİK KURALLARI:
+
 - Türkçe yaz.
-- Haber dili doğal, akıcı ve profesyonel olsun.
-- Aynı kelime ve cümle kalıplarını gereksiz yere tekrar etme.
-- Metni kopyalamak yerine anlamını koruyarak özgün biçimde yeniden yaz.
-- 5N1K ve ters piramit haber mantığını kullan.
-- İlk paragraflarda haberin en önemli bilgisini ver.
-- Reklam dili, aşırı övgü ve yapay clickbait kullanma.
-- Başlık Google Haberler ve Google Keşfet açısından güçlü, anlaşılır ve merak uyandırıcı olsun.
-- SEO başlığı mümkün olduğunca yaklaşık 55-65 karakter aralığında olsun.
-- Spot 2-3 cümle olsun; uygun olduğunda okuyucunun temel sorularına cevap arayan soru yapısı kullanılabilir.
-- Meta açıklaması yaklaşık 140-160 karakter hedeflesin.
-- URL slug kısa, Türkçe karakter içermeyen ve tirelerle ayrılmış olsun.
-- Haber metninde anlamlı H2 ara başlıkları kullan.
-- Her H2 yeni bilgi taşısın; aynı bilgiyi farklı başlıklarla tekrarlama.
-- Haber gövdesi verilen kaynak bilgi miktarına göre yeterince kapsamlı olsun.
-- Anahtar kelimeler doğal ve haberle doğrudan ilgili olsun.
-- Etiketlerde yalnızca gerçekten ilgili kavramları kullan.
-- Kullanıcının verdiği veriler yetersizse metni gereksiz yere uzatma.
+- Haber dili doğal, akıcı, tarafsız ve profesyonel olsun.
+- Blog yazısı veya yapay zekâ metni gibi yazma.
+- Gereksiz dolgu cümlelerinden kaçın.
+- Aynı kelime ve cümle kalıplarını sürekli tekrarlama.
+- Her paragraf yeni bilgi taşısın.
+- Başlık, spot, giriş ve ara başlıklarda aynı ifadeleri gereksiz yere tekrar etme.
+- Reklam dili, aşırı övgü ve yanıltıcı clickbait kullanma.
+- Bilmediğin somut bilgileri uydurma.
+- İddiaları kesinleşmiş gerçek gibi sunma.
+- Haber konusu gerektiriyorsa "iddia edildi", "açıklandı", "belirtildi" gibi uygun atıfları kullan.
+
+SEO KURALLARI:
+
+- Güçlü bir ana haber başlığı oluştur.
+- Başlık Google Haberler ve Google Discover açısından doğal ve ilgi çekici olsun.
+- Ana anahtar kelimeyi mümkünse başlıkta doğal biçimde kullan.
+- Spot 2-3 cümle olsun.
+- Spot haberin en önemli bilgisini versin ve okuyucunun devamını merak etmesini sağlasın.
+- Haber girişini spotun kopyası olarak yazma.
+- Haber gövdesinde anlamlı H2 ara başlıkları kullan.
+- Her H2 haberin farklı bir yönünü anlatsın.
+- Gerektiğinde H3 kullanılabilir.
+- Haber yeterli bilgi içeriyorsa kapsamlı biçimde yaz.
+- Meta açıklaması doğal ve arama niyetine uygun olsun.
+- URL slug kısa ve anlaşılır olsun.
+- Anahtar kelimeler gerçekten haberle ilgili olsun.
+- Etiketler haberin konusu ve kategorisiyle doğrudan ilişkili olsun.
+
+ÇIKTI:
+
+article alanında TAM HABER METNİNİ oluştur.
+Sadece özet veya birkaç cümle üretme.
+
+article içinde:
+- Haber girişi
+- Gelişme paragrafları
+- H2 ara başlıkları
+- Konunun gerektirdiği ayrıntılar
+bulunsun.
+
+Kullanıcı kısa bir konu girdiyse bunu "düzenlenecek metin" olarak değil,
+"haber hazırlanacak konu" olarak değerlendir.
+
+Kullanıcı uzun bir kaynak metin girdiyse kaynak gerçeklerine sadık kal.
 `;
 
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-5-mini",
+        model: "gpt-5.4-mini",
         store: false,
         instructions,
-        input: `Aşağıdaki ham içeriği SEO uyumlu profesyonel habere dönüştür:\n\n${sourceText}`,
+        input: `Aşağıdaki girdiyi analiz et ve profesyonel SEO haberi hazırla:\n\n${sourceText}`,
         text: {
           format: {
             type: "json_schema",
@@ -78,34 +136,34 @@ KESİN KURALLAR:
               properties: {
                 title: {
                   type: "string",
-                  description: "SEO ve Discover uyumlu haber başlığı"
+                  description: "SEO ve Google Discover uyumlu ana haber başlığı",
                 },
                 spot: {
                   type: "string",
-                  description: "Haberin güçlü ve doğal spot metni"
+                  description: "Haberin güçlü, doğal ve bilgilendirici spot metni",
                 },
                 meta: {
                   type: "string",
-                  description: "SEO meta açıklaması"
+                  description: "SEO meta açıklaması",
                 },
                 slug: {
                   type: "string",
-                  description: "Türkçe karakter içermeyen URL slug"
+                  description: "Türkçe karakter içermeyen kısa URL slug",
                 },
                 article: {
                   type: "string",
-                  description: "H2 ara başlıkları içeren tam haber metni"
+                  description: "H2 ara başlıkları ve paragrafları içeren tam haber metni",
                 },
                 keywords: {
                   type: "array",
                   items: { type: "string" },
-                  description: "SEO anahtar kelimeleri"
+                  description: "SEO anahtar kelimeleri",
                 },
                 tags: {
                   type: "array",
                   items: { type: "string" },
-                  description: "Haber etiketleri"
-                }
+                  description: "Haber etiketleri",
+                },
               },
               required: [
                 "title",
@@ -114,77 +172,73 @@ KESİN KURALLAR:
                 "slug",
                 "article",
                 "keywords",
-                "tags"
+                "tags",
               ],
-              additionalProperties: false
-            }
-          }
-        }
-      })
+              additionalProperties: false,
+            },
+          },
+        },
+      }),
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("OpenAI API hatası:", data);
+      console.error("OpenAI API error:", data);
 
       return Response.json(
         {
-          error:
-            data?.error?.message ||
-            "Yapay zekâ servisine bağlanırken bir hata oluştu."
+          error: "Haber oluşturulurken OpenAI API hatası oluştu.",
+          details: data?.error?.message || "Bilinmeyen API hatası",
         },
         { status: response.status }
       );
     }
 
-    let outputText = data.output_text;
+    let outputText = "";
 
-    if (!outputText && Array.isArray(data.output)) {
+    if (data.output_text) {
+      outputText = data.output_text;
+    } else if (Array.isArray(data.output)) {
       for (const item of data.output) {
         if (!Array.isArray(item.content)) continue;
 
         for (const content of item.content) {
           if (content.type === "output_text" && content.text) {
-            outputText = content.text;
-            break;
+            outputText += content.text;
           }
         }
-
-        if (outputText) break;
       }
     }
 
     if (!outputText) {
       return Response.json(
-        { error: "Yapay zekâdan kullanılabilir bir yanıt alınamadı." },
+        { error: "Modelden haber çıktısı alınamadı." },
         { status: 500 }
       );
     }
 
-    const result = JSON.parse(outputText);
+    let result;
 
-    return Response.json({
-      success: true,
+    try {
+      result = JSON.parse(outputText);
+    } catch (parseError) {
+      console.error("JSON parse error:", parseError, outputText);
 
-      // Mevcut sitenin kullandığı alanlar
-      title: result.title,
-      spot: result.spot,
-      meta: result.meta,
-      keywords: result.keywords.join(", "),
+      return Response.json(
+        { error: "Model çıktısı işlenemedi." },
+        { status: 500 }
+      );
+    }
 
-      // Bir sonraki adımda ekranda göstereceğimiz yeni alanlar
-      slug: result.slug,
-      article: result.article,
-      tags: result.tags.join(", ")
-    });
-
+    return Response.json(result, { status: 200 });
   } catch (error) {
-    console.error("generate-news hatası:", error);
+    console.error("generate-news error:", error);
 
     return Response.json(
       {
-        error: "Haber oluşturulurken beklenmeyen bir hata oluştu."
+        error: "Haber oluşturulurken beklenmeyen bir hata oluştu.",
+        details: error?.message || "Bilinmeyen hata",
       },
       { status: 500 }
     );
