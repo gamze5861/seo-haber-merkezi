@@ -237,35 +237,56 @@ URL SLUG:
 
 EDİTÖR NOTU / ARTICLE ÇIKTISI:
 
-Article alanına haberin tam ve yayınlanabilir gövdesini ver.
+Article alanına haberin tam, yayınlanabilir ve profesyonel gövdesini yaz.
 
-ÇOK ÖNEMLİ:
-- Article içinde "H2", "H3", "H1", "Başlık:", "Ara Başlık:" gibi teknik ifadeleri ASLA okuyucuya yazma.
-- <h2>, <h3>, <p>, </p> gibi HTML etiketlerini ASLA çıktı olarak gösterme.
-- Ara başlığın yalnızca gerçek metnini yaz.
-- Örneğin "H2 BDDK Nedir?" YANLIŞTIR.
-- Doğru kullanım yalnızca "BDDK Nedir?" şeklindedir.
-- "H2 Yağış Bekleniyor mu?" YANLIŞTIR.
-- Doğru kullanım yalnızca "Yağış Bekleniyor mu?" şeklindedir.
+Article kesinlikle temiz haber metni olmalıdır.
 
-Article şu yapıda olsun:
+- "H2", "H3", "H1", "Başlık:", "Ara Başlık:", "Editör Notu:" gibi teknik ifadeleri okuyucuya gösterme.
+- <h2>, <h3>, <p>, </p> gibi HTML etiketlerini ASLA kullanma.
+- Ara başlıkların yalnızca gerçek metnini yaz.
+- Haber gövdesinde SEO başlığını ve spotu tekrar etme.
+- İlk paragraf doğrudan haberin en önemli bilgisini versin.
+- 5N1K ve ters piramit tekniğine uygun ilerle.
+- Blog, rehber veya yapay zekâ metni gibi değil; profesyonel internet haberi gibi yaz.
+- NTV, Hürriyet ve Milliyet'in internet haberciliğindeki doğal, akıcı ve bilgi odaklı haber yapısını örnek al; hiçbir kaynağın cümlelerini taklit veya kopyalama.
+- Aynı bilgi ve cümleleri farklı kelimelerle tekrar etme.
+- Her paragraf yeni ve anlamlı bilgi taşısın.
+- Gereksiz giriş, sonuç özeti ve dolgu cümlesi kullanma.
+- Kullanıcının vermediği tarih, saat, rakam, isim, kurum açıklaması veya olay ayrıntısı uydurma.
 
-Önce haberin güçlü giriş paragrafını yaz.
+ARTICLE YAPISI:
 
-Ardından konunun doğal akışına göre ara başlık kullan.
+Önce 5N1K'nın en önemli unsurlarını içeren güçlü bir haber giriş paragrafı yaz.
 
-Ara başlığın altında 1-3 bilgi taşıyan doğal haber paragrafı bulunabilir.
-
-Daha sonra gerekiyorsa yeni bir ara başlık ve yeni paragraflarla devam et.
+Ardından konunun doğal akışına göre ara başlıklar kullan.
 
 Ara başlıklar:
 - Okuyucunun arama niyetine uygun olsun.
-- Gerektiğinde soru biçiminde olsun.
+- Gerektiğinde soru biçiminde yazılsın.
+- SEO açısından aranabilecek doğal sorguları karşılasın.
 - Birbirinin aynısı olmasın.
-- Ana başlığı tekrar etmesin.
-- "H2" veya başka teknik etiket içermesin.
+- Ana başlığı kelimesi kelimesine tekrar etmesin.
+- Başında "H2", "H3", "Ara Başlık" gibi ifadeler bulunmasın.
 
-Article doğrudan haber sitesine kopyalanabilecek kadar temiz, doğal ve profesyonel olsun.
+Her ara başlığın altında konuyu açıklayan 1-3 bilgi taşıyan doğal haber paragrafı bulunabilir.
+
+ÖRNEK DOĞRU ÇIKTI:
+
+Elektrikler Ne Zaman Gelecek?
+
+Planlı kesintilerin sona erme saatleri çalışma programına göre değişiklik gösterebilir. Kesintiden etkilenen bölgelerde enerji verilme zamanı, saha çalışmalarının tamamlanmasına bağlı olarak güncellenebilir.
+
+Hangi İlçelerde Elektrik Kesintisi Var?
+
+Kesinti programında yer alan ilçeler, mahalleler ve çalışma saatleri mevcut veriler doğrultusunda okuyucuya açık ve anlaşılır biçimde aktarılmalıdır.
+
+ÖRNEK YANLIŞ ÇIKTI:
+
+H2 Elektrikler Ne Zaman Gelecek?
+<h2>Elektrikler Ne Zaman Gelecek?</h2>
+Ara Başlık: Elektrikler Ne Zaman Gelecek?
+
+Article doğrudan haber sitesine kopyalanabilecek kadar temiz, doğal, özgün ve yayınlanabilir olsun.
 SON KONTROL:
 
 Çıktıyı vermeden önce kendi içinde kontrol et:
