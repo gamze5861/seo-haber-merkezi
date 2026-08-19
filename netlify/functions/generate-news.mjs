@@ -237,17 +237,35 @@ URL SLUG:
 
 EDİTÖR NOTU / ARTICLE ÇIKTISI:
 
-Article alanına haberin tam gövdesini ver.
+Article alanına haberin tam ve yayınlanabilir gövdesini ver.
 
-HTML etiketlerini okuyucuya düz metin olarak gösterme.
+ÇOK ÖNEMLİ:
+- Article içinde "H2", "H3", "H1", "Başlık:", "Ara Başlık:" gibi teknik ifadeleri ASLA okuyucuya yazma.
+- <h2>, <h3>, <p>, </p> gibi HTML etiketlerini ASLA çıktı olarak gösterme.
+- Ara başlığın yalnızca gerçek metnini yaz.
+- Örneğin "H2 BDDK Nedir?" YANLIŞTIR.
+- Doğru kullanım yalnızca "BDDK Nedir?" şeklindedir.
+- "H2 Yağış Bekleniyor mu?" YANLIŞTIR.
+- Doğru kullanım yalnızca "Yağış Bekleniyor mu?" şeklindedir.
 
-Eğer arayüz article değerini doğrudan metin olarak gösteriyorsa <h2>, <p>, </p> gibi HTML etiketleri üretme.
+Article şu yapıda olsun:
 
-Bunun yerine okunabilir düz metin yapısı kullan:
-- H2 başlığı
-- Altında normal paragraflar
-- Ardından diğer H2 başlığı ve paragraflar
+Önce haberin güçlü giriş paragrafını yaz.
 
+Ardından konunun doğal akışına göre ara başlık kullan.
+
+Ara başlığın altında 1-3 bilgi taşıyan doğal haber paragrafı bulunabilir.
+
+Daha sonra gerekiyorsa yeni bir ara başlık ve yeni paragraflarla devam et.
+
+Ara başlıklar:
+- Okuyucunun arama niyetine uygun olsun.
+- Gerektiğinde soru biçiminde olsun.
+- Birbirinin aynısı olmasın.
+- Ana başlığı tekrar etmesin.
+- "H2" veya başka teknik etiket içermesin.
+
+Article doğrudan haber sitesine kopyalanabilecek kadar temiz, doğal ve profesyonel olsun.
 SON KONTROL:
 
 Çıktıyı vermeden önce kendi içinde kontrol et:
