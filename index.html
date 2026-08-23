@@ -779,6 +779,20 @@ const panelTitle = document.getElementById("panelTitle");
 
     async function demoEdit() {
     const text = document.getElementById("sourceText").value.trim();
+      const activeTool = localStorage.getItem("seoHaberciTool") || "duzenle";
+      const activeToolName = localStorage.getItem("seoHaberciToolName") || "Haberi Düzenle";
+      const toolPrompts = {
+        "duzenle": "Bu metni profesyonel, özgün ve SEO uyumlu bir internet haberine dönüştür.",
+        "haber-yaz": "Verilen konu veya bilgilerden başlık, spot, H2 ara başlıklar ve özgün haber metni içeren profesyonel SEO uyumlu bir haber oluştur.",
+        "gundem": "Verilen konu veya anahtar kelimeden güncel gündeme uygun, haber değeri taşıyan SEO haber fikirleri ve başlıkları üret.",
+        "seo-analiz": "Verilen haber metnini SEO açısından analiz et. Başlık, spot, anahtar kelime kullanımı, H2 yapısı, okunabilirlik ve arama niyeti açısından değerlendir; SEO puanı ve iyileştirme önerileri ver.",
+        "baslik": "Verilen konu veya haber metni için SEO uyumlu, yüksek tıklanma potansiyeline sahip 10 farklı haber başlığı üret. Başlıkları doğal, gazetecilik diline uygun ve birbirinden farklı hazırla.",
+        "discover": "Verilen haber metnini Google Discover için optimize et. Merak uyandıran ancak yanıltıcı olmayan başlık alternatifleri, güçlü spot ve Discover uyumlu içerik önerileri üret.",
+        "yerel": "Verilen şehir, ilçe veya konuya göre yerel gazetecilik dilinde SEO uyumlu haber hazırla. Başlık, spot, H2 ara başlıklar ve özgün haber metni oluştur.",
+        "hizli": "Verilen metni hızlı editör modunda düzenle. Yazım hatalarını düzelt, başlığı güçlendir, kısa bir spot oluştur ve gerekli H2 ara başlıkları ekle."
+          };
+      const toolPrompt = toolPrompts[activeTool] || toolPrompts["duzenle"];
+      const finalText = toolPrompt + "\n\nKullanıcı içeriği:\n" + text; 
 
     if (!text) {
         alert("Önce bir haber metni veya konu girin.");
@@ -799,10 +813,13 @@ const panelTitle = document.getElementById("panelTitle");
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                sourceText: text
-            })
-        });
+         body: JSON.stringify({
+    sourceText: text,
+    tool: activeTool,
+    toolName: activeToolName,
+    instruction: toolPrompts[activeTool] || toolPrompts["duzenle"]
+});
+});
 
         const data = await response.json();
 
