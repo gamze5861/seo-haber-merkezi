@@ -592,7 +592,7 @@
         <div class="panel">
 
           <div class="panel-header">
-            <h3>Ham Haber / Notlar</h3>
+            <h3 id="panelTitle">Ham Haber / Notlar</h3>
             <span class="status">Editör Modu</span>
           </div>
 
@@ -602,7 +602,7 @@
           ></textarea>
 
           <div class="workspace-actions">
-            <button class="btn dark-btn" onclick="demoEdit()">Haberi Düzenle</button>
+           <button id="actionButton" class="btn dark-btn" onclick="demoEdit()">Haberi Düzenle</button>
             <button class="btn light-btn" onclick="clearEditor()">Temizle</button>
           </div>
 
@@ -732,14 +732,16 @@ SEO Haberci AI, gazeteciliğin ve editoryal kararların yerine geçmek için de�
     "yerel": "Yerel Haber Merkezi",
     "hizli": "Hızlı Editör"
   };
-
+const panelTitle = document.getElementById("panelTitle");
+    panelTitle.textContent = toolNames[tool] || "Ham Haber / Notlar";
+    const statusText = document.querySelector("#editor .status");
+    statusText.textContent = toolNames[tool] || "Editör Modu";
   localStorage.setItem("seoHaberciTool", tool);
   localStorage.setItem(
     "seoHaberciToolName",
     toolNames[tool] || "SEO Haber Editörü"
   );
-const title = document.getElementById("toolTitle");
-  title.textContent = toolNames[tool] || "SEO Haber Editörü";
+
     const sourceText = document.getElementById("sourceText");
     sourceText.placeholder = "İşlem yapmak istediğiniz metni veya konuyu buraya yazın..."; 
     sourceText.value = "";
