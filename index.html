@@ -473,7 +473,7 @@
         </p>
 
         <div class="hero-actions">
-          <button class="btn btn-primary" ">Haberi Düzenle</button>
+          <button class="btn btn-primary" id="actionButton">Haberi Düzenle</button>
           <button class="btn btn-secondary" onclick="goTools()">Araçları Gör</button>
         </div>
       </div>
@@ -732,6 +732,18 @@ SEO Haberci AI, gazeteciliğin ve editoryal kararların yerine geçmek için de�
     "yerel": "Yerel Haber Merkezi",
     "hizli": "Hızlı Editör"
   };
+    const actionNames = {
+  "duzenle": "Haberi Düzenle",
+  "haber-yaz": "SEO Haber Yaz",
+  "gundem": "Gündemi Getir",
+  "seo-analiz": "SEO Analiz Et",
+  "baslik": "Başlık Üret",
+  "discover": "Discover Başlığı Üret",
+  "yerel": "Yerel Haber Oluştur",
+  "hizli": "Hızlı Düzenle"
+};
+    const actionButton = document.getElementById("actionButton");
+actionButton.textContent = actionNames[tool] || "Haberi Düzenle";
 const panelTitle = document.getElementById("panelTitle");
     panelTitle.textContent = toolNames[tool] || "Ham Haber / Notlar";
     const statusText = document.querySelector("#editor .status");
