@@ -522,71 +522,55 @@
 
     <div class="tools">
 
-      <div class="tool-card" onclick="goEditor()">
-        <div class="tool-icon">✍️</div>
-        <h3>Haberi Düzenle</h3>
-        <p>
-          Ham metni profesyonel haber diline, SEO yapısına ve editoryal standarda göre düzenler.
-        </p>
-      </div>
+  <div class="tool-card" onclick="openTool('duzenle')">
+    <div class="tool-icon">✍️</div>
+    <h3>Haberi Düzenle</h3>
+    <p>Ham haber metnini özgün, profesyonel ve SEO uyumlu yayına hazır habere dönüştür.</p>
+  </div>
 
-     <div class="tool-card" onclick="goEditor()">
-        <div class="tool-icon">📰</div>
-        <h3>Sıfırdan Haber Yaz</h3>
-        <p>
-          Bir konu veya bilgi notundan başlık, spot ve tam haber metni üretir.
-        </p>
-      </div>
+  <div class="tool-card" onclick="openTool('haber-yaz')">
+    <div class="tool-icon">📰</div>
+    <h3>SEO Haber Yaz</h3>
+    <p>Bir konu veya bilgi notundan başlık, spot, ara başlıklar ve tam SEO haber metni oluştur.</p>
+  </div>
 
-     <div class="tool-card" onclick="goEditor()">
-        <div class="tool-icon">🔥</div>
-        <h3>Gündemi Keşfet</h3>
-        <p>
-          Google Trends ve yükselen arama konularını editör gözüyle takip etmek için hazırlanacak.
-        </p>
-      </div>
+  <div class="tool-card" onclick="openTool('gundem')">
+    <div class="tool-icon">🔥</div>
+    <h3>Gündem Merkezi</h3>
+    <p>Güncel gündem, yükselen aramalar ve haberleştirilebilecek yeni konu fikirlerini keşfet.</p>
+  </div>
 
-<div class="tool-card" onclick="goEditor()">
-      <div class="tool-icon">📈</div>
-        <h3>SEO Analizi</h3>
-        <p>
-          Başlık, meta, okunabilirlik, anahtar kelime, ara başlık ve içerik yapısını kontrol eder.
-        </p>
-      </div>
+  <div class="tool-card" onclick="openTool('seo-analiz')">
+    <div class="tool-icon">📊</div>
+    <h3>SEO Haber Analizi</h3>
+    <p>Başlık, spot, meta açıklama, anahtar kelime, H2 yapısı ve okunabilirliği analiz et.</p>
+  </div>
 
-     <div class="tool-card" onclick="goEditor()">
-        <div class="tool-icon">🎯</div>
-        <h3>Başlık Atölyesi</h3>
-        <p>
-          Haber dili, Google araması ve Discover için farklı başlık alternatifleri üretir.
-        </p>
-      </div>
+  <div class="tool-card" onclick="openTool('baslik')">
+    <div class="tool-icon">🎯</div>
+    <h3>Başlık Atölyesi</h3>
+    <p>SEO, Google News ve yüksek tıklanma potansiyeli için farklı haber başlıkları üret.</p>
+  </div>
 
-     <div class="tool-card" onclick="goEditor()">
-        <div class="tool-icon">🧭</div>
-        <h3>Discover Optimizasyonu</h3>
-        <p>
-          İçeriğin merak, güncellik ve başlık yapısını Google Discover mantığına göre değerlendirir.
-        </p>
-      </div>
+  <div class="tool-card" onclick="openTool('discover')">
+    <div class="tool-icon">✨</div>
+    <h3>Discover Editörü</h3>
+    <p>Başlık ve haber metnini Google Discover için analiz et, güçlendir ve optimize et.</p>
+  </div>
 
-      <div class="tool-card" onclick="goEditor()">
-        <div class="tool-icon">📍</div>
-        <h3>Yerel Haber Modu</h3>
-        <p>
-          İl, ilçe ve bölge odaklı haberleri yerel SEO yapısına göre yeniden düzenler.
-        </p>
-      </div>
+  <div class="tool-card" onclick="openTool('yerel')">
+    <div class="tool-icon">📍</div>
+    <h3>Yerel Haber Merkezi</h3>
+    <p>Hava durumu, elektrik, su, trafik, nöbetçi eczane ve diğer yerel haberleri hazırla.</p>
+  </div>
 
-     <div class="tool-card" onclick="goEditor()">
-        <div class="tool-icon">⚡</div>
-        <h3>Hızlı Editör</h3>
-        <p>
-          Başlık, spot, meta ve kısa SEO kontrolünü tek ekranda saniyeler içinde hazırlar.
-        </p>
-      </div>
+  <div class="tool-card" onclick="openTool('hizli')">
+    <div class="tool-icon">⚡</div>
+    <h3>Hızlı Editör</h3>
+    <p>Başlık, spot, meta açıklama, H2 ve SEO düzenlemelerini hızlı şekilde gerçekleştir.</p>
+  </div>
 
-    </div>
+</div>
   </section>
 
   <section class="workspace-wrap" id="editor">
@@ -595,7 +579,7 @@
 
       <div class="section-title">
         <div>
-          <h2>SEO Haber Editörü</h2>
+        <h2 id="toolTitle">SEO Haber Editörü</h2>
         </div>
 
         <p>
@@ -737,6 +721,32 @@ SEO Haberci AI, gazeteciliğin ve editoryal kararların yerine geçmek için de�
       });
     }
 
+  function openTool(tool) {
+  const toolNames = {
+    "duzenle": "Haberi Düzenle",
+    "haber-yaz": "SEO Haber Yaz",
+    "gundem": "Gündem Merkezi",
+    "seo-analiz": "SEO Haber Analizi",
+    "baslik": "Başlık Atölyesi",
+    "discover": "Discover Editörü",
+    "yerel": "Yerel Haber Merkezi",
+    "hizli": "Hızlı Editör"
+  };
+
+  localStorage.setItem("seoHaberciTool", tool);
+  localStorage.setItem(
+    "seoHaberciToolName",
+    toolNames[tool] || "SEO Haber Editörü"
+  );
+const title = document.getElementById("toolTitle");
+  title.textContent = toolNames[tool] || "SEO Haber Editörü";
+    const sourceText = document.getElementById("sourceText");
+    sourceText.placeholder = "İşlem yapmak istediğiniz metni veya konuyu buraya yazın..."; 
+    sourceText.value = "";
+  document.getElementById("editor").scrollIntoView({
+    behavior: "smooth"
+  });
+} 
     function goTools() {
       document.getElementById("araclar").scrollIntoView({
         behavior: "smooth"
