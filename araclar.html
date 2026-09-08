@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SEO Haberci AI Araçları</title>
+  <meta name="description" content="Haber başlığı, meta açıklama, SEO URL, kelime ve karakter sayacı gibi ücretsiz editör araçları." />
+  <style>
+    :root{
+      --bg:#061a4d;
+      --bg2:#0a3ec9;
+      --card:rgba(255,255,255,.10);
+      --line:rgba(255,255,255,.16);
+      --text:#ffffff;
+      --muted:#c9d7ff;
+      --accent:#ffe548;
+      --btn:#ffffff;
+      --btnText:#123a9e;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 0%, #1658ff 0, transparent 33%),
+        linear-gradient(135deg,var(--bg2),var(--bg));
+      min-height:100vh;
+    }
+    .wrap{max-width:1160px;margin:auto;padding:28px 18px 60px}
+    header{
+      display:flex;align-items:center;justify-content:space-between;gap:18px;
+      margin-bottom:42px
+    }
+    .brand{font-size:26px;font-weight:800}
+    .brand span{color:var(--accent)}
+    .back{
+      color:#fff;text-decoration:none;border:1px solid var(--line);
+      padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.06)
+    }
+    .hero{max-width:780px;margin-bottom:34px}
+    .hero small{
+      display:inline-block;background:var(--accent);color:#14244f;font-weight:800;
+      padding:6px 10px;border-radius:999px;margin-bottom:14px
+    }
+    h1{font-size:clamp(36px,6vw,64px);line-height:1.02;margin:0 0 14px}
+    .hero p{font-size:18px;line-height:1.6;color:var(--muted);margin:0}
+    .grid{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px
+    }
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:20px;
+      padding:20px;backdrop-filter:blur(8px)
+    }
+    .card h2{font-size:20px;margin:0 0 8px}
+    .card p{color:var(--muted);line-height:1.5;min-height:48px}
+    label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px}
+    input,textarea,select{
+      width:100%;border:1px solid rgba(255,255,255,.18);border-radius:12px;
+      background:rgba(255,255,255,.10);color:#fff;padding:12px 13px;outline:none
+    }
+    textarea{min-height:110px;resize:vertical}
+    input::placeholder,textarea::placeholder{color:#b8c7ee}
+    option{color:#111}
+    button{
+      width:100%;border:0;border-radius:12px;padding:12px 14px;margin-top:12px;
+      font-weight:800;cursor:pointer;background:var(--btn);color:var(--btnText)
+    }
+    .out{
+      margin-top:12px;padding:12px;border-radius:12px;background:rgba(0,0,0,.15);
+      border:1px solid rgba(255,255,255,.10);white-space:pre-wrap;color:#fff;
+      min-height:44px
+    }
+    .soon{opacity:.72}
+    .badge{
+      display:inline-block;font-size:12px;font-weight:800;padding:4px 8px;border-radius:999px;
+      background:rgba(255,229,72,.16);color:#ffe96a;margin-bottom:8px
+    }
+    footer{margin-top:40px;color:#aebfe9;font-size:13px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:640px){.grid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">SEO <span>Haberci AI</span></div>
+    <a class="back" href="/">← Ana sayfa</a>
+  </header>
+
+  <section class="hero">
+    <small>ÜCRETSİZ EDİTÖR ARAÇLARI</small>
+    <h1>Haberciler için hızlı araçlar.</h1>
+    <p>Başlık, meta açıklama, SEO URL ve metin kontrollerini tek sayfada yap. Bu sayfa doğrudan <b>/araclar.html</b> adresinde çalışacak şekilde hazırlandı.</p>
+  </section>
+
+  <section class="grid">
+    <article class="card">
+      <h2>Haber Başlığı Oluşturucu</h2>
+      <p>Konuyu yaz, farklı haber başlığı seçenekleri üret.</p>
+      <label>Konu</label>
+      <input id="topic" placeholder="Örn: Adana'da sağanak yağış" />
+      <label>Tarz</label>
+      <select id="style">
+        <option value="seo">SEO</option>
+        <option value="discover">Discover</option>
+        <option value="short">Kısa manşet</option>
+      </select>
+      <button onclick="makeTitles()">Başlık üret</button>
+      <div class="out" id="titleOut">Başlıklar burada görünecek.</div>
+    </article>
+
+    <article class="card">
+      <h2>Meta Açıklama Oluşturucu</h2>
+      <p>Metinden yaklaşık 155 karakterlik SEO açıklaması hazırla.</p>
+      <label>Haber metni</label>
+      <textarea id="metaText" placeholder="Haber metnini buraya yapıştır..."></textarea>
+      <button onclick="makeMeta()">Meta oluştur</button>
+      <div class="out" id="metaOut">Meta açıklaması burada görünecek.</div>
+    </article>
+
+    <article class="card">
+      <h2>SEO URL Oluşturucu</h2>
+      <p>Başlığı kısa, temiz ve Türkçe karakterlerden arındırılmış URL'ye çevir.</p>
+      <label>Başlık</label>
+      <input id="slugText" placeholder="Örn: Adana'da Bugün Hava Nasıl?" />
+      <button onclick="makeSlug()">URL oluştur</button>
+      <div class="out" id="slugOut">seo-url-burada</div>
+    </article>
+
+    <article class="card">
+      <h2>Kelime & Karakter Sayacı</h2>
+      <p>Metnin kelime, karakter ve boşluksuz karakter sayısını anında gör.</p>
+      <label>Metin</label>
+      <textarea id="countText" oninput="countNow()" placeholder="Metni yaz veya yapıştır..."></textarea>
+      <div class="out" id="countOut">Kelime: 0 • Karakter: 0 • Boşluksuz: 0</div>
+    </article>
+
+    <article class="card">
+      <h2>Başlık Karakter Sayacı</h2>
+      <p>Başlığın uzunluğunu kontrol et; 60 karakter civarını hedefle.</p>
+      <label>Başlık</label>
+      <input id="headlineCount" oninput="headlineNow()" placeholder="Başlığını yaz..." />
+      <div class="out" id="headlineOut">0 karakter</div>
+    </article>
+
+    <article class="card">
+      <span class="badge">YAKINDA</span>
+      <h2>Haber Spotu Oluşturucu</h2>
+      <p>AI bağlantısı eklendiğinde haber metninden otomatik spot hazırlayacak.</p>
+      <div class="out soon">AI özelliği bağlanacak.</div>
+    </article>
+
+    <article class="card">
+      <span class="badge">YAKINDA</span>
+      <h2>5N1K Haber Oluşturucu</h2>
+      <p>Ham bilgileri 5N1K ve ters piramit düzeninde haber metnine çevirecek.</p>
+      <div class="out soon">AI özelliği bağlanacak.</div>
+    </article>
+
+    <article class="card">
+      <span class="badge">YAKINDA</span>
+      <h2>Discover Başlık Oluşturucu</h2>
+      <p>Google Discover için kısa, güçlü ve merak uyandıran başlıklar üretecek.</p>
+      <div class="out soon">AI özelliği bağlanacak.</div>
+    </article>
+
+    <article class="card">
+      <span class="badge">YAKINDA</span>
+      <h2>Haber Metni Düzenleyici</h2>
+      <p>Ajans metnini özgün, akıcı ve editoryal kurallara uygun biçimde düzenleyecek.</p>
+      <div class="out soon">AI özelliği bağlanacak.</div>
+    </article>
+  </section>
+
+  <footer>SEO Haberci AI • Editör araçları</footer>
+</div>
+
+<script>
+  function clean(s){return (s||"").trim();}
+  function makeTitles(){
+    const t = clean(document.getElementById('topic').value);
+    const st = document.getElementById('style').value;
+    const o = document.getElementById('titleOut');
+    if(!t){o.textContent="Önce bir konu yaz.";return}
+    let a=[];
+    if(st==="seo"){
+      a=[
+        `${t}: Son Durum Ne?`,
+        `${t} Hakkında Merak Edilenler`,
+        `${t}: İşte Bilmeniz Gerekenler`,
+        `${t} Gündemde: Detaylar Belli Oldu`,
+        `${t} İçin Yeni Gelişme`
+      ];
+    }else if(st==="discover"){
+      a=[
+        `${t} Gündem Oldu`,
+        `${t} İçin Dikkat Çeken Gelişme`,
+        `${t} Konusunda Yeni Detay`,
+        `${t}: Herkes Bunu Konuşuyor`,
+        `${t} İçin Beklenen Açıklama Geldi`
+      ];
+    }else{
+      a=[
+        `${t}: Yeni Gelişme`,
+        `${t} Gündemde`,
+        `${t} İçin Kritik Saatler`,
+        `${t} Dikkat Çekti`,
+        `${t} Hakkında Son Durum`
+      ];
+    }
+    o.textContent=a.map((x,i)=>`${i+1}. ${x}`).join("\n");
+  }
+  function makeMeta(){
+    let t=clean(document.getElementById('metaText').value).replace(/\s+/g,' ');
+    const o=document.getElementById('metaOut');
+    if(!t){o.textContent="Önce haber metnini yapıştır.";return}
+    if(t.length>155)t=t.slice(0,152).replace(/\s+\S*$/,'')+"...";
+    o.textContent=t;
+  }
+  function trMap(s){
+    return s.toLowerCase()
+      .replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s')
+      .replace(/ı/g,'i').replace(/ö/g,'o').replace(/ç/g,'c')
+      .replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-');
+  }
+  function makeSlug(){
+    const t=clean(document.getElementById('slugText').value);
+    document.getElementById('slugOut').textContent=t?trMap(t):"Önce başlık yaz.";
+  }
+  function countNow(){
+    const t=document.getElementById('countText').value;
+    const words=t.trim()?t.trim().split(/\s+/).length:0;
+    document.getElementById('countOut').textContent=
+      `Kelime: ${words} • Karakter: ${t.length} • Boşluksuz: ${t.replace(/\s/g,'').length}`;
+  }
+  function headlineNow(){
+    const n=document.getElementById('headlineCount').value.length;
+    let note=n===0?"":n<=60?" • Uygun aralıkta":" • Biraz uzun";
+    document.getElementById('headlineOut').textContent=`${n} karakter${note}`;
+  }
+</script>
+</body>
+</html>
