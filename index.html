@@ -841,8 +841,17 @@ const panelTitle = document.getElementById("panelTitle");
                 ? data.keywords.join(", ")
                 : (data.keywords || "Anahtar kelimeler oluşturuldu.");
 
-        document.getElementById("resultNote").innerText =
-            data.article || data.content || data.news || "SEO haber metni oluşturuldu.";
+        const haberMetni =
+  data.article ||
+  data.content ||
+  data.news ||
+  data.text ||
+  data.result ||
+  data.output ||
+  "";
+
+document.getElementById("resultNote").innerText =
+  haberMetni || "Haber metni oluşturulamadı.";
 
     } catch (error) {
         console.error(error);
