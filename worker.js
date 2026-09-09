@@ -2,96 +2,183 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    if (url.pathname === "/api/generate-news" && request.method === "POST") {
+    // API ENDPOINT
+    if (url.pathname === "/api/generate-news") {
+      // Sadece POST kabul et
+      if (request.method !== "POST") {
+        return json(
+          { error: "Bu endpoint yalnızca POST isteği kabul eder." },
+          405
+        );
+      }
+
       try {
+        if (!env.OPENAI_API_KEY) {
+          return json(
+            { error: "OPENAI_API_KEY Cloudflare üzerinde tanımlı değil." },
+            500
+          );
+        }
+
         const body = await request.json();
 
-        const sourceText = (body.sourceText || "").trim();
-        const instruction =
+        const sourceText = String(body.sourceText || "").trim();
+        const tool = String(body.tool || "duzenle").trim();
+        const toolName = String(body.toolName || "Haber Düzenleme").trim();
+        const instruction = String(
           body.instruction ||
-          "Metni profesyonel, özgün, akıcı ve SEO uyumlu haber formatında düzenle.";
+          "Metni profesyonel, özgün, akıcı ve SEO uyumlu Türkçe haber formatında düzenle."
+        ).trim();
 
-        if (!sourceText) {
-          return Response.json(
-            { error: "Haber metni boş olamaz." },
-            { status: 400 }
+        if (sourceText.length < 3) {
+          return json(
+            { error: "Lütfen düzenlenecek haber metnini girin." },
+            400
           );
         }
 
-        if (!env.OPENAI_API_KEY) {
-          return Response.json(
-            { error: "OPENAI_API_KEY tanımlı değil." },
-            { status: 500 }
-          );
-        }
+        const systemPrompt = `
+Sen deneyimli bir Türkçe haber editörüsün.
 
-        const prompt = `
-Sen profesyonel bir Türkçe haber editörüsün.
+Görev türü: ${toolName}
+Araç kodu: ${tool}
 
-Görev:
+Temel kurallar:
+- Haber dili tarafsız ve profesyonel olsun.
+- 5N1K mantığını koru.
+- Ters piramit haber yapısını kullan.
+- Bilgi uydurma.
+- Kullanıcının verdiği isim, rakam, tarih ve yerleri değiştirme.
+- Gereksiz tekrarları temizle.
+- Blog dili kullanma.
+- Başlık kısa ve doğal olsun.
+- Spot haberin en önemli bilgisini versin.
+- Meta açıklaması yaklaşık 140-160 karakter olsun.
+- Anahtar kelimeler 3-6 adet olsun.
+- Haber metni okunabilir paragraflardan oluşsun.
+- Markdown kod bloğu kullanma.
+
+Özel talimat:
 ${instruction}
+`;
 
-Kullanıcı içeriği:
+        const userPrompt = `
+Aşağıdaki içeriği düzenle:
+
 ${sourceText}
 
-Yanıtı SADECE geçerli JSON olarak ver.
+SADECE şu JSON yapısında yanıt ver:
 
-Şu yapıyı kullan:
 {
-  "title": "SEO uyumlu haber başlığı",
-  "spot": "Kısa haber spotu",
-  "meta": "Yaklaşık 150-160 karakterlik meta açıklama",
-  "keywords": ["anahtar kelime 1", "anahtar kelime 2", "anahtar kelime 3"],
+  "title": "Haber başlığı",
+  "spot": "Haber spotu",
+  "meta": "SEO meta açıklaması",
+  "keywords": ["kelime1", "kelime2", "kelime3"],
   "article": "Düzenlenmiş haber metni"
 }
 `;
 
-        const openaiResponse = await fetch("https://api.openai.com/v1/responses", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: "gpt-5-mini",
-            input: prompt
-          })
-        });
+        const openaiResponse = await fetch(
+          "https://api.openai.com/v1/responses",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${env.OPENAI_API_KEY}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: "gpt-5.6-luna",
+              input: [
+                {
+                  role: "system",
+                  content: systemPrompt
+                },
+                {
+                  role: "user",
+                  content: userPrompt
+                }
+              ],
+              reasoning: {
+                effort: "none"
+              }
+            })
+          }
+        );
 
-        const result = await openaiResponse.json();
+        const raw = await openaiResponse.json();
 
         if (!openaiResponse.ok) {
-          return Response.json(
+          console.error("OPENAI ERROR:", raw);
+
+          return json(
             {
               error:
-                result?.error?.message ||
-                "OpenAI isteği başarısız oldu."
+                raw?.error?.message ||
+                "OpenAI API isteği başarısız oldu."
             },
-            { status: openaiResponse.status }
+            openaiResponse.status
           );
         }
 
-        const outputText =
-          result.output_text ||
-          result.output?.[0]?.content?.[0]?.text ||
-          "";
+        // Responses API metnini güvenli şekilde çıkar
+        let outputText = "";
+
+        if (typeof raw.output_text === "string") {
+          outputText = raw.output_text;
+        }
+
+        if (!outputText && Array.isArray(raw.output)) {
+          for (const item of raw.output) {
+            if (!Array.isArray(item.content)) continue;
+
+            for (const content of item.content) {
+              if (
+                content.type === "output_text" &&
+                typeof content.text === "string"
+              ) {
+                outputText += content.text;
+              }
+            }
+          }
+        }
+
+        if (!outputText) {
+          console.error("EMPTY OUTPUT:", raw);
+
+          return json(
+            { error: "Yapay zekâ boş yanıt döndürdü." },
+            500
+          );
+        }
+
+        // ```json ... ``` gelirse temizle
+        const cleaned = outputText
+          .replace(/^```json\s*/i, "")
+          .replace(/^```\s*/i, "")
+          .replace(/```$/i, "")
+          .trim();
 
         let parsed;
 
         try {
-          parsed = JSON.parse(outputText);
-        } catch {
-          const cleaned = outputText
-            .replace(/^```json\s*/i, "")
-            .replace(/^```\s*/i, "")
-            .replace(/```$/i, "")
-            .trim();
-
           parsed = JSON.parse(cleaned);
+        } catch (parseError) {
+          console.error("JSON PARSE ERROR:", cleaned);
+
+          return json(
+            {
+              error:
+                "Yapay zekâ yanıtı JSON formatında çözümlenemedi.",
+              raw: cleaned
+            },
+            500
+          );
         }
 
-        return Response.json({
+        return json({
+          success: true,
           title: parsed.title || "",
+          seoTitle: parsed.title || "",
           spot: parsed.spot || "",
           meta: parsed.meta || "",
           metaDescription: parsed.meta || "",
@@ -103,15 +190,30 @@ Yanıtı SADECE geçerli JSON olarak ver.
           news: parsed.article || ""
         });
       } catch (error) {
-        return Response.json(
+        console.error("WORKER ERROR:", error);
+
+        return json(
           {
-            error: error?.message || "Beklenmeyen bir hata oluştu."
+            error:
+              error?.message ||
+              "Sunucu tarafında beklenmeyen bir hata oluştu."
           },
-          { status: 500 }
+          500
         );
       }
     }
 
+    // API dışındaki tüm isteklerde site dosyalarını göster
     return env.ASSETS.fetch(request);
   }
 };
+
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store"
+    }
+  });
+}
