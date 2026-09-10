@@ -813,12 +813,12 @@ const panelTitle = document.getElementById("panelTitle");
             headers: {
                 "Content-Type": "application/json"
             },
-         body: JSON.stringify({
+      body: JSON.stringify({
     sourceText: text,
     tool: activeTool,
     toolName: activeToolName,
     instruction: toolPrompts[activeTool] || toolPrompts["duzenle"]
-});
+})
 });
 
         const data = await response.json();
@@ -839,7 +839,7 @@ const panelTitle = document.getElementById("panelTitle");
         document.getElementById("resultKeywords").innerText =
             Array.isArray(data.keywords)
                 ? data.keywords.join(", ")
-                : (data.keywords || "Anahtar kelimeler oluşturuldu."):
+                : (data.keywords || "Anahtar kelimeler oluşturuldu.");
 
         const haberMetni =
   data.article ||
