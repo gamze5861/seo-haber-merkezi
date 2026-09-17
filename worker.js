@@ -5,13 +5,44 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    if (url.pathname === "/api/register" && request.method === "POST") return register(request, env);
-    if (url.pathname === "/api/login" && request.method === "POST") return login(request, env);
-    if (url.pathname === "/api/logout" && request.method === "POST") return logout(request, env);
-    if (url.pathname === "/api/me" && request.method === "GET") return me(request, env);
-    if (url.pathname === "/api/generate-news" && request.method === "POST") return generateNews(request, env);
+    try {
+      if (url.pathname === "/api/register" && request.method === "POST") {
+        return await register(request, env);
+      }
 
-    return env.ASSETS.fetch(request);
+      if (url.pathname === "/api/login" && request.method === "POST") {
+        return await login(request, env);
+      }
+
+      if (url.pathname === "/api/logout" && request.method === "POST") {
+        return await logout(request, env);
+      }
+
+      if (url.pathname === "/api/me" && request.method === "GET") {
+        return await me(request, env);
+      }
+
+      if (url.pathname === "/api/generate-news" && request.method === "POST") {
+        return await generateNews(request, env);
+      }
+
+      return env.ASSETS.fetch(request);
+    } catch (error) {
+      console.error("WORKER ERROR:", error);
+
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: error?.message || "Sunucu hatası oluştu."
+        }),
+        {
+          status: 500,
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+          }
+        }
+      );
+    }
   }
 };
 
