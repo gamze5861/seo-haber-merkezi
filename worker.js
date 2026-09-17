@@ -130,7 +130,7 @@ async function createSession(env, userId) {
 async function hashPassword(password, saltHex) {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({ name:"PBKDF2", hash:"SHA-256", salt: hexToBytes(saltHex), iterations:150000 }, key, 256);
+  const bits = await crypto.subtle.deriveBits({ name:"PBKDF2", hash:"SHA-256", salt: hexToBytes(saltHex), iterations:100000 }, key, 256);
   return bytesToHex(new Uint8Array(bits));
 }
 
