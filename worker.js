@@ -95,49 +95,179 @@ async function me(request, env) {
 
 async function generateNews(request, env) {
   const user = await currentUser(request, env);
-  if (!user) return json({ error: "Haber üretmek için giriş yapın." }, 401);
+
+  if (!user) {
+    return json({ error: "Haber üretmek için giriş yapın." }, 401);
+  }
 
   let reserved = false;
+
   try {
     const body = await request.json();
+
     const sourceText = (body.sourceText || "").trim();
-    const instruction = body.instruction || "Metni profesyonel, özgün, akıcı ve SEO uyumlu haber formatında düzenle.";
-    if (!sourceText) return json({ error: "Haber metni boş olamaz." }, 400);
-    if (!env.OPENAI_API_KEY) return json({ error: "OPENAI_API_KEY tanımlı değil." }, 500);
+    const instruction =
+      body.instruction ||
+      "Metni profesyonel, özgün, akıcı ve SEO uyumlu haber formatında düzenle.";
+
+    if (!sourceText) {
+      return json({ error: "Haber metni boş olamaz." }, 400);
+    }
+
+    if (!env.OPENAI_API_KEY) {
+      return json({ error: "OPENAI_API_KEY tanımlı değil." }, 500);
+    }
 
     const reserve = await env.DB.prepare(
       "UPDATE users SET credits = credits - 1 WHERE id = ? AND credits > 0 RETURNING credits"
-    ).bind(user.id).first();
-    if (!reserve) return json({ error: "Ücretsiz kullanım hakkınız bitti.", code: "NO_CREDITS" }, 402);
+    )
+      .bind(user.id)
+      .first();
+
+    if (!reserve) {
+      return json(
+        {
+          error: "Ücretsiz kullanım hakkınız bitti.",
+          code: "NO_CREDITS"
+        },
+        402
+      );
+    }
+
     reserved = true;
 
-    const prompt = `Sen profesyonel bir Türkçe haber editörüsün.\n\nGörev:\n${instruction}\n\nKullanıcı içeriği:\n${sourceText}\n\nYanıtı SADECE geçerli JSON olarak ver.\n{\n  "title":"SEO uyumlu haber başlığı",\n  "spot":"Kısa haber spotu",\n  "meta":"Yaklaşık 150-160 karakterlik meta açıklama",\n  "keywords":["anahtar kelime 1","anahtar kelime 2","anahtar kelime 3"],\n  "article":"Düzenlenmiş haber metni"\n}`;
+    const prompt = `
+Sen profesyonel bir Türkçe haber editörüsün.
 
-    const openaiResponse = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: { "Authorization": `Bearer ${env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "gpt-5-mini", input: prompt })
-    });
-    const result = await openaiResponse.json();
-    if (!openaiResponse.ok) throw new Error(result?.error?.message || "OpenAI isteği başarısız oldu.");
+Görev:
+${instruction}
 
-    const outputText = result.output_text || result.output?.[0]?.content?.[0]?.text || "";
+Kaynak metin:
+${sourceText}
+
+SADECE geçerli JSON döndür.
+Markdown veya kod bloğu kullanma.
+
+Şu yapıda cevap ver:
+{
+  "title": "SEO uyumlu haber başlığı",
+  "spot": "Kısa ve dikkat çekici spot",
+  "meta": "SEO meta açıklaması",
+  "keywords": "virgülle ayrılmış anahtar kelimeler",
+  "content": "Profesyonel ve özgün haber metni"
+}
+`;
+
+    const openaiResponse = await fetch(
+      "https://api.openai.com/v1/responses",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "gpt-5-mini",
+          input: prompt
+        })
+      }
+    );
+
+    const rawResponse = await openaiResponse.text();
+
+    if (!openaiResponse.ok) {
+      let errorMessage = "OpenAI isteği başarısız oldu.";
+
+      try {
+        const errorData = JSON.parse(rawResponse);
+        errorMessage =
+          errorData?.error?.message ||
+          errorMessage;
+      } catch {}
+
+      throw new Error(errorMessage);
+    }
+
+    let result;
+
+    try {
+      result = JSON.parse(rawResponse);
+    } catch {
+      throw new Error("OpenAI yanıtı okunamadı.");
+    }
+
+    const outputText = (result.output || [])
+      .flatMap(item => item.content || [])
+      .filter(
+        part =>
+          part.type === "output_text" &&
+          typeof part.text === "string"
+      )
+      .map(part => part.text)
+      .join("")
+      .trim();
+
+    if (!outputText) {
+      throw new Error("OpenAI boş yanıt verdi.");
+    }
+
+    let cleaned = outputText
+      .replace(/^```json\s*/i, "")
+      .replace(/^```\s*/i, "")
+      .replace(/\s*```$/i, "")
+      .trim();
+
     let parsed;
-    try { parsed = JSON.parse(outputText); }
-    catch {
-      const cleaned = outputText.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
+
+    try {
       parsed = JSON.parse(cleaned);
+    } catch {
+      const start = cleaned.indexOf("{");
+      const end = cleaned.lastIndexOf("}");
+
+      if (start === -1 || end === -1 || end <= start) {
+        throw new Error("Yapay zekâ geçerli JSON üretmedi.");
+      }
+
+      parsed = JSON.parse(
+        cleaned.substring(start, end + 1)
+      );
     }
 
     return json({
-      title: parsed.title || "", spot: parsed.spot || "", meta: parsed.meta || "",
-      metaDescription: parsed.meta || "", keywords: Array.isArray(parsed.keywords) ? parsed.keywords : [],
-      article: parsed.article || "", content: parsed.article || "", news: parsed.article || "",
+      ok: true,
+      title: parsed.title || "",
+      spot: parsed.spot || "",
+      meta: parsed.meta || "",
+      keywords: parsed.keywords || "",
+      content: parsed.content || "",
       credits: reserve.credits
     });
-  } catch (e) {
-    if (reserved) await env.DB.prepare("UPDATE users SET credits = credits + 1 WHERE id = ?").bind(user.id).run();
-    return json({ error: e?.message || "Beklenmeyen bir hata oluştu." }, 500);
+
+  } catch (error) {
+    console.error("GENERATE NEWS ERROR:", error);
+
+    if (reserved && user?.id && env.DB) {
+      try {
+        await env.DB.prepare(
+          "UPDATE users SET credits = credits + 1 WHERE id = ?"
+        )
+          .bind(user.id)
+          .run();
+      } catch (refundError) {
+        console.error("CREDIT REFUND ERROR:", refundError);
+      }
+    }
+
+    return json(
+      {
+        ok: false,
+        error:
+          error?.message ||
+          "Haber hazırlanırken bir hata oluştu."
+      },
+      500
+    );
   }
 }
 
