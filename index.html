@@ -11,7 +11,6 @@
     content="SEO Haberci AI; editörler, gazeteciler ve içerik ekipleri için profesyonel SEO haber düzenleme, başlık üretme, trend keşfi ve içerik analiz platformudur."
   />
 
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
   <style>
     * {
@@ -440,6 +439,16 @@
         margin-top: 10px;
       }
     }
+  
+    .auth-strip {
+      max-width: 1180px; margin: 14px auto 0; padding: 0 5%;
+      display:flex; justify-content:flex-end; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .auth-strip a,.auth-strip button {
+      border:1px solid var(--border); background:#fff; color:var(--navy);
+      padding:8px 12px; border-radius:10px; font-weight:700; text-decoration:none; cursor:pointer;
+    }
+    .credit-pill {background:var(--cream); border:1px solid #f0d879; padding:8px 12px; border-radius:999px; font-weight:800;}
   </style>
 </head>
 
@@ -455,6 +464,10 @@
       <a href="#hakkinda">Hakkında</a>
     </nav>
   </header>
+  <div class="auth-strip" id="authStrip">
+    <span id="authState">Hesap kontrol ediliyor...</span>
+  </div>
+
 
   <section class="hero">
     <div class="hero-inner">
@@ -813,7 +826,7 @@ const panelTitle = document.getElementById("panelTitle");
             headers: {
                 "Content-Type": "application/json"
             },
-      body: JSON.stringify({
+         body: JSON.stringify({
     sourceText: text,
     tool: activeTool,
     toolName: activeToolName,
@@ -823,9 +836,18 @@ const panelTitle = document.getElementById("panelTitle");
 
         const data = await response.json();
 
+        if (response.status === 401) {
+            window.location.href = "/giris.html?next=/";
+            return;
+        }
+        if (response.status === 402) {
+            window.location.href = "/paketler.html";
+            return;
+        }
         if (!response.ok) {
             throw new Error(data.error || "Haber oluşturulamadı.");
         }
+        refreshAuthState();
 
         document.getElementById("resultTitle").innerText =
             data.title || data.seoTitle || "Başlık oluşturuldu.";
@@ -863,6 +885,37 @@ document.getElementById("resultNote").innerText =
         }
     }
 }
+  
+
+async function refreshAuthState() {
+  const box = document.getElementById("authState");
+  if (!box) return;
+  try {
+    const r = await fetch("/api/me", { credentials: "same-origin" });
+    if (!r.ok) {
+      box.innerHTML = '<a href="/giris.html">Giriş Yap</a> <a href="/kayit.html">Ücretsiz Kayıt</a>';
+      return;
+    }
+    const u = await r.json();
+    box.innerHTML = '<span class="credit-pill">Kalan hak: ' + u.credits + '</span> ' +
+      '<strong>' + escapeHtml(u.email) + '</strong> ' +
+      '<button type="button" onclick="logoutUser()">Çıkış</button>';
+  } catch {
+    box.innerHTML = '<a href="/giris.html">Giriş Yap</a> <a href="/kayit.html">Ücretsiz Kayıt</a>';
+  }
+}
+
+function escapeHtml(v) {
+  return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+async function logoutUser() {
+  await fetch("/api/logout", { method: "POST", credentials: "same-origin" });
+  location.reload();
+}
+
+refreshAuthState();
+
   </script>
 
 </body>
