@@ -450,6 +450,71 @@
       padding:8px 12px; border-radius:10px; font-weight:700; text-decoration:none; cursor:pointer;
     }
     .credit-pill {background:var(--cream); border:1px solid #f0d879; padding:8px 12px; border-radius:999px; font-weight:800;}
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .price-card {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(24,59,115,0.06);
+      display: flex;
+      flex-direction: column;
+      min-height: 330px;
+    }
+    .price-card.featured {
+      border: 2px solid var(--blue2);
+      transform: translateY(-6px);
+      box-shadow: 0 18px 42px rgba(24,59,115,0.14);
+    }
+    .popular-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--yellow);
+      color: #1b2942;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    .price-card h3 { font-size: 21px; margin-bottom: 8px; }
+    .price-card .credits { color: var(--muted); font-weight: 700; }
+    .price {
+      font-size: 34px;
+      font-weight: 900;
+      color: var(--navy);
+      margin: 18px 0 6px;
+      letter-spacing: -1px;
+    }
+    .price-note { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+    .price-features { list-style: none; display: grid; gap: 9px; margin-bottom: 22px; }
+    .price-features li { font-size: 14px; }
+    .price-features li::before { content: "✓ "; color: var(--success); font-weight: 900; }
+    .price-card .btn { margin-top: auto; width: 100%; text-align: center; text-decoration: none; display: block; }
+    .payment-note {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border: 1px solid #f0d879;
+      background: var(--cream);
+      border-radius: 14px;
+      color: #5a4a12;
+      font-size: 13px;
+    }
+    @media (max-width: 980px) {
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+      .price-card.featured { transform: none; }
+    }
+
   </style>
 </head>
 
@@ -462,6 +527,7 @@
       <a href="#araclar">Araçlar</a>
       <a href="#editor">Haber Editörü</a>
       <a href="#trendler">Trendler</a>
+      <a href="#paketler">Paketler</a>
       <a href="#hakkinda">Hakkında</a>
     </nav>
   </header>
@@ -487,7 +553,7 @@
         </p>
 
         <div class="hero-actions">
-          <button class="btn btn-primary" id="actionButton">Haberi Düzenle</button>
+          <button class="btn btn-primary" onclick="goEditor()">Haberi Düzenle</button>
           <a class="btn btn-secondary" href="/araclar.html">Araçları Gör</a>
         </div>
       </div>
@@ -507,13 +573,13 @@
           </div>
 
           <div class="mini-item">
-            <strong>Google Trends</strong>
-            <span>Yakında canlı</span>
+            <strong>Gündem Merkezi</strong>
+            <span>Aktif</span>
           </div>
 
           <div class="mini-item">
-            <strong>Discover Kontrolü</strong>
-            <span>Yakında</span>
+            <strong>Discover Editörü</strong>
+            <span>Aktif</span>
           </div>
         </div>
       </div>
@@ -597,7 +663,7 @@
         </div>
 
         <p>
-          Metninizi buraya yapıştırın. Bir sonraki aşamada bu ekranı gerçek yapay zekâ motoruna bağlayacağız.
+          Metninizi veya haber konunuzu buraya girin. SEO Haberci AI, seçtiğiniz editör aracına göre profesyonel çıktıyı hazırlasın.
         </p>
       </div>
 
@@ -654,7 +720,7 @@
             <div class="result-box">
               <small>Editör Notu</small>
               <strong id="resultNote">
-                Yapay zekâ bağlantısı sonraki aşamada eklenecek.
+                Hazır. Metninizi girip işlemi başlatabilirsiniz.
               </strong>
             </div>
 
@@ -676,21 +742,20 @@
         <h2>Hangi konu yükseliyor, editör önce görsün.</h2>
 
         <p>
-          Canlı Google Trends ve güncel arama verilerini daha sonra buraya bağlayacağız.
-          Ama ana yapıyı şimdiden bu mantığa göre kuruyoruz.
+          Gündem Merkezi ile konu ve anahtar kelimelerden haber değeri taşıyan SEO başlıkları ve editoryal haber açıları oluşturabilirsiniz.
         </p>
       </div>
 
       <div class="trend-list">
 
         <div class="trend-row">
-          <b>Yükselen arama konusu</b>
-          <span>CANLI VERİ</span>
+          <b>Gündemden konu geliştirme</b>
+          <span>AI</span>
         </div>
 
         <div class="trend-row">
-          <b>Google gündem sinyali</b>
-          <span>YAKINDA</span>
+          <b>SEO haber fikri üretimi</b>
+          <span>AKTİF</span>
         </div>
 
         <div class="trend-row">
@@ -702,6 +767,82 @@
 
     </div>
   </section>
+
+
+  <section class="section" id="paketler">
+    <div class="section-title">
+      <div>
+        <h2>Profesyonel Paketler</h2>
+      </div>
+      <p>
+        İhtiyacınız kadar kredi alın, kullandıkça düşsün. Paketler tek seferlik kredi satın alımı içindir.
+      </p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Editör</h3>
+        <div class="credits">50 haber kredisi</div>
+        <div class="price">499 TL</div>
+        <div class="price-note">Tek seferlik kredi paketi</div>
+        <ul class="price-features">
+          <li>Tüm editör araçlarına erişim</li>
+          <li>SEO haber üretimi</li>
+          <li>Başlık ve Discover araçları</li>
+          <li>50 haber üretim hakkı</li>
+        </ul>
+        <button class="btn dark-btn" type="button" onclick="paymentPending()">Paketi Seç</button>
+      </div>
+
+      <div class="price-card featured">
+        <span class="popular-badge">EN ÇOK TERCİH EDİLEN</span>
+        <h3>Profesyonel</h3>
+        <div class="credits">200 haber kredisi</div>
+        <div class="price">1.499 TL</div>
+        <div class="price-note">Tek seferlik kredi paketi</div>
+        <ul class="price-features">
+          <li>Tüm editör araçlarına erişim</li>
+          <li>Yoğun günlük haber üretimi</li>
+          <li>SEO ve Discover araçları</li>
+          <li>200 haber üretim hakkı</li>
+        </ul>
+        <button class="btn btn-primary" type="button" onclick="paymentPending()">Paketi Seç</button>
+      </div>
+
+      <div class="price-card">
+        <h3>Haber Merkezi</h3>
+        <div class="credits">500 haber kredisi</div>
+        <div class="price">2.999 TL</div>
+        <div class="price-note">Tek seferlik kredi paketi</div>
+        <ul class="price-features">
+          <li>Haber ekipleri için yüksek kullanım</li>
+          <li>Tüm profesyonel araçlar</li>
+          <li>Yerel haber ve hızlı editör</li>
+          <li>500 haber üretim hakkı</li>
+        </ul>
+        <button class="btn dark-btn" type="button" onclick="paymentPending()">Paketi Seç</button>
+      </div>
+
+      <div class="price-card">
+        <h3>Ajans</h3>
+        <div class="credits">1.500 haber kredisi</div>
+        <div class="price">6.999 TL</div>
+        <div class="price-note">Tek seferlik kredi paketi</div>
+        <ul class="price-features">
+          <li>Yüksek hacimli içerik üretimi</li>
+          <li>Tüm editör ve SEO araçları</li>
+          <li>Ajans ve yayın ekiplerine uygun</li>
+          <li>1.500 haber üretim hakkı</li>
+        </ul>
+        <button class="btn dark-btn" type="button" onclick="paymentPending()">Paketi Seç</button>
+      </div>
+    </div>
+
+    <div class="payment-note">
+      Yeni üyeler 3 ücretsiz haber kredisiyle başlayabilir. Online ödeme altyapısı etkinleştirildiğinde paket satın alma işlemleri bu bölümden yapılacaktır.
+    </div>
+  </section>
+
 
   <section class="section" id="hakkinda">
 
@@ -729,6 +870,11 @@ SEO Haberci AI, gazeteciliğin ve editoryal kararların yerine geçmek için de�
   </footer>
 
   <script>
+
+    function paymentPending() {
+      alert("Online ödeme sistemi etkinleştirme aşamasında. PayTR aktivasyonu tamamlandığında bu butondan güvenli ödeme yapabileceksiniz.");
+    }
+
     function goEditor() {
       document.getElementById("editor").scrollIntoView({
         behavior: "smooth"
@@ -788,7 +934,7 @@ const panelTitle = document.getElementById("panelTitle");
       document.getElementById("resultMeta").innerText = "—";
       document.getElementById("resultKeywords").innerText = "—";
       document.getElementById("resultNote").innerText =
-        "Yapay zekâ bağlantısı sonraki aşamada eklenecek.";
+        "Hazır. Metninizi girip işlemi başlatabilirsiniz.";
     }
 
     async function demoEdit() {
