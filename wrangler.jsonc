@@ -3,6 +3,7 @@
   "name": "seo-haber-merkezi",
   "main": "worker.js",
   "compatibility_date": "2026-09-09",
+
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
@@ -10,5 +11,13 @@
     "run_worker_first": [
       "/api/*"
     ]
-  }
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "seohaberci-db",
+      "database_id": "862863a9-326c-4ba3-8adf-d10283460335"
+    }
+  ]
 }
